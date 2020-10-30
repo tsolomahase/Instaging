@@ -8,12 +8,12 @@
       <div>
         <div class="form-login box">
           <h2 class="core-sprite brand-name-img"></h2>
-          <h5 class="light-color"><strong>Sign up to see photos and <br> videos from your friends.</strong></h5>
+          
 
           <hr>
 
           <%= form_with(model: @user, local: true) do |f| %>
-          
+
             <div class="form-group">
               <%= f.text_field :name, autofocus: true, placeholder: "Your name", class: "form-control" %>
 
