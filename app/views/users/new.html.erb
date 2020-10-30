@@ -13,8 +13,7 @@
           <hr>
 
           <%= form_with(model: @user, local: true) do |f| %>
-            <%= render 'shared/devisemes' %>
-
+          
             <div class="form-group">
               <%= f.text_field :name, autofocus: true, placeholder: "Your name", class: "form-control" %>
 
