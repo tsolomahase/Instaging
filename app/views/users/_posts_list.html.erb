@@ -1,0 +1,100 @@
+<div class="row edit-profile-wrapper">
+  <div class="col-sm-3 left-col">
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action">FEED</a>
+    </div>
+  </div>
+  <div class="col-sm-9 right-col">
+    <div class="row username-img">
+
+    </div>
+
+<% @posts.each do |post| %>
+  <div class="card mt-5 post">
+    <div class="card-header d-flex align-items-center">
+        <%= link_to user_path(post.user), class: "no-text-decoration",
+        title: post.user.name do %>
+        <br>
+        <%= image_tag post.user.icon.url(), width: '38', height: '38', class: "round-img" %>
+        <strong><%= post.user.name %></strong>
+        <br>
+
+        <div class="carousel-item active">
+          <%= post.content %>
+       </div>
+
+
+        <br>
+        <div class="carousel-item active">
+          <%= image_tag(post.image.url) if post.image && post.image.url  %>
+       </div>
+      <% end %>
+    </div>
+
+
+    <div class="card mt-3 post">
+        <div class="card-header d-flex align-items-center">
+
+      <% unless post.user_id == current_user.id %>
+
+        <% if favorite.present? %>
+          <button type="button" class="btn btn-danger"><%= link_to 'Unfavorite', favorite_path(id: favorite.id), method: :delete %>
+        <% else %>
+          <button type="button" class="btn btn primary"><%= link_to 'Make Favorite', favorites_path(post_id: post.id), method: :post %>
+        <% end %>
+      <% end %>
+      </div>
+
+      <% if post.is_belongs_to? current_user %>
+        <%= link_to post_path(post), method: :delete, class: "ml-auto delete-post-icon mx-0 my-auto" do %>
+          <i class="far fa-trash-alt" aria-hidden="true"></i>
+        <% end %>
+       <br>
+       <% if post.is_belongs_to? current_user %>
+        <button type="button" class="btn btn-default"> <%= link_to 'Edit', edit_post_path(post)%>
+      <% end %>
+
+    <% end %>
+
+
+    </div>
+
+
+
+
+    <div class="card-body">
+      <div class="row actions">
+        <div id="like-icon-post-<%= post.id.to_s %>">
+          <%= render "like_icon", {is_liked: post.is_liked(current_user), post: post} %>
+        </div>
+        <a href="#" class="core-sprite comment hide-text">Comment</a>
+        <div id="bookmark-icon-post-<%= post.id.to_s %>" class="ml-auto">
+          <%= render "bookmark_icon", {is_bookmarked: post.is_bookmarked(current_user), post: post} %>
+        </div>
+      </div>
+      <div id="like-text-post-<%= post.id.to_s %>">
+        <%= render "like_text", {likes: post.likes} %>
+      </div>
+    <br>
+    <br>
+
+
+      <!-- load comments -->
+      <div id="comment-post-<%= post.id.to_s %>">
+        <%= render 'comment_list', {post: post} %>
+      </div>
+      <%= link_to time_ago_in_words(post.created_at).upcase + " AGO", post_path(post),
+        class: "light-color post-time no-text-decoration" %>
+      <hr>
+      <div class="row actions" id="comment-form-post-<%= post.id.to_s %>">
+        <%= render 'comment_form', {post: post} %>
+      </div>
+
+
+
+    </div>
+  </div>
+<% end %>
+
+</div>
+</div>
