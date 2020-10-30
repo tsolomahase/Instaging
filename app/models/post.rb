@@ -5,7 +5,7 @@ has_many :photos, dependent: :destroy
 has_many :favorites, dependent: :destroy
 has_many :favorite_users, through: :favorites, source: :user
 
-mount_uploader :image, PhotoUploader
+mount_uploader :image, ImageUploader
 
 validates :image, presence: true
 validates :content, presence: true, length: { maximum: 140 }
