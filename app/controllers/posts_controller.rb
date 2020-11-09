@@ -3,15 +3,17 @@ class PostsController < ApplicationController
     before_action :logged_in?
     before_action :find_post, only: [:show, :destroy]
 
-
   def index
       @posts = Post.all
+      @posts = @posts.paginate(page: params[:page], per_page: 5).order('created_at DESC')
       @post = Post.new
       @favorite = current_user.favorites.find_by(post_id: @post.id)
     end
 
     def show
-  
+     @likes=Like.new
+     @likes=Like.all
+
     end
 
     def edit
@@ -20,6 +22,7 @@ class PostsController < ApplicationController
     def new
       @favorites = current_user.favorite_posts.all
       @posts = Post.all
+      @posts = @posts.paginate(page: params[:page], per_page: 5).order('created_at DESC')
       if params[:back]
         @post = Post.new(post_params)
       else
@@ -29,6 +32,7 @@ class PostsController < ApplicationController
 
     def create
       @posts = Post.all
+      @posts = @posts.paginate(page: params[:page], per_page: 5).order('created_at DESC')
         @post = Post.new(post_params)
         respond_to do |format|
           if @post.save
@@ -43,6 +47,7 @@ class PostsController < ApplicationController
 
     def confirm
       @posts = Post.all
+      @posts = @posts.paginate(page: params[:page], per_page: 5).order('created_at DESC')
       @post = current_user.posts.build(post_params)
       @post.id = params[:id]
    end
@@ -72,7 +77,13 @@ class PostsController < ApplicationController
    end
   end
 
-
+  def favourite
+    @favorites = current_user.favorite_posts.all
+    @post = Post.new
+    @posts = Post.all
+    @posts = @posts.paginate(page: params[:page], per_page: 5).order('created_at DESC')
+    @user = User.find(params[:id])
+  end
 
   private
   def set_post
@@ -92,11 +103,5 @@ class PostsController < ApplicationController
     params.require(:post).permit(:content, :id, :image, :image_cache, :user_id, :name, :email)
   end
 
-  def favourite
-    @favorites = current_user.favorite_posts.all
-    @post = Post.new
-    @posts = Post.all
-    @user = User.find(params[:id])
-  end
 
 end
