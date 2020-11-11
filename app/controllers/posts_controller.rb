@@ -22,7 +22,6 @@ class PostsController < ApplicationController
     def new
       @favorites = current_user.favorite_posts.all
       @posts = Post.all
-      @posts = @posts.paginate(page: params[:page], per_page: 5).order('created_at DESC')
       if params[:back]
         @post = Post.new(post_params)
       else
